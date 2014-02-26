@@ -9,15 +9,65 @@
 # Copyright (c) 2014 Adones Cunha adonescunha@gmail.com
 
 
+import datetime
 from pyvows import Vows, expect
 from mock import Mock
+from random import randint
+from decimal import Decimal
 
-from nf_paulistana.registries.fields import Field, RegistryField
+from nf_paulistana.registries.fields import (
+    DefaultLengthMixin,
+    Field,
+    RegistryField,
+    DateField,
+    NumericField,
+    DecimalField,
+    TextField
+)
 
 
 FIELD_LENGTH  = 12
 DEFAULT_VALUE = 'DEFAULT'
 CURRENT_VALUE = 'CURRENT'
+
+
+@Vows.batch
+class DefaultLengthMixinVows(Vows.Context):
+
+    def topic(self):
+        expected_length = randint(1, 64)
+
+        class FieldClass(DefaultLengthMixin, Field):
+
+            length = expected_length
+
+        return FieldClass, expected_length
+
+    class WhenLengthIsNotProvided(Vows.Context):
+
+        def topic(self, topic):
+            field_class, expected_length = topic
+
+            return field_class(), expected_length
+
+        def it_does_not_require_length(self, topic):
+            expect(topic).Not.to_be_an_error()
+
+        def it_defaults_length_to_class_attribute_value(self, topic):
+            field, expected_length = topic
+            expect(field.length).to_equal(expected_length)
+
+    class WhenLengthIsProvided(Vows.Context):
+
+        def topic(self, topic):
+            field_class, _ = topic
+            expected_length = randint(65, 100)
+
+            return field_class(length=expected_length), expected_length
+
+        def it_assigns_length(self, topic):
+            field, expected_length = topic
+            expect(field.length).to_equal(expected_length)
 
 @Vows.batch
 class FieldVows(Vows.Context):
@@ -139,26 +189,108 @@ class FieldVows(Vows.Context):
 @Vows.batch
 class RegistryFieldVows(Vows.Context):
 
-    class WhenInitialized(Vows.Context):
-
-        def topic(self):
-            return RegistryField()
-
-        def it_does_not_require_length(self, topic):
-            expect(topic).Not.to_be_an_error()
-
     class ValueStr(Vows.Context):
 
         def topic(self):
             field = RegistryField()
             expected_value = 'EXPECTEDVALUE'
             registry = Mock()
-            registry.as_registry = Mock(return_value=expected_value)
+            registry.as_registry = Mock(return_value=expected_value + '\n\r')
             field.value = registry
 
             return expected_value, field.value_str
 
-        def it_returns_value_registry_representation(self, topic):
-            print topic
+        def it_returns_value_registry_representation_without_breakline(self, topic):
+            expected, actual = topic
+            expect(actual).to_equal(expected)
+
+@Vows.batch
+class DateFieldVows(Vows.Context):
+
+    class ProcessValue(Vows.Context):
+
+        def topic(self):
+            field = DateField()
+            field.value = datetime.date(2014, 2, 25)
+
+            return field.process_value()
+
+        def it_returns_a_date_representation(self, topic):
+            expect(topic).to_equal('20140225')
+
+@Vows.batch
+class NumericFieldVows(Vows.Context):
+
+    class EmptyValue(Vows.Context):
+
+        def topic(self):
+            field = NumericField(length=10)
+
+            return field, field.empty_value
+
+        def its_a_zeroed_string(self, topic):
+            _, empty_value = topic
+
+            for char in empty_value:
+                expect(char).to_equal('0')
+
+        def its_length_is_the_same_as_field_length(self, topic):
+            field, empty_value = topic
+            expect(len(empty_value)).to_equal(field.length)
+
+    class ProcessValue(Vows.Context):
+
+        def topic(self):
+            field = NumericField(length=10)
+            field.get_numeric_value_as_string = Mock(return_value='12')
+
+            return '0000000012', field.process_value()
+
+        def it_returns_numeric_value_prepended_with_zeros(self, topic):
+            expected, actual = topic
+            expect(actual).to_equal(expected)
+
+@Vows.batch
+class DecimalFieldVows(Vows.Context):
+
+    def topic(self):
+        return DecimalField()
+
+    def it_defaults_to_zero(self, topic):
+        expect(topic.default).to_equal(Decimal('0'))
+
+    class GetNumericValueAsString(Vows.Context):
+
+        def topic(self):
+            cases = [
+                (Decimal('34.52')  ,'3452'),
+                (Decimal('23.123') ,'2312'),
+                (Decimal('54.2')   ,'5420'),
+                (Decimal('60')     ,'6000')
+            ]
+
+            for value, expected in cases:
+                field = DecimalField()
+                field.value = value
+
+                yield expected, field.get_numeric_value_as_string()
+
+        def it_returns_a_string_without_decimal_points(self, topic):
+            expected, actual = topic
+            expect(actual).to_equal(expected)
+
+@Vows.batch
+class TextFieldVows(Vows.Context):
+
+    class ProcessValue(Vows.Context):
+
+        def topic(self):
+            value = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nNam ac dolor metus'
+            field = TextField()
+            field.value = value
+
+            return field.process_value(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.|Nam ac dolor metus'
+
+        def it_returns_value_with_new_line_replaced_by_pipe(self, topic):
             expected, actual = topic
             expect(actual).to_equal(expected)
