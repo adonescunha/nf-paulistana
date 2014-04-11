@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Nota Fiscal Paulistana
-# https://github.com/orygens/nf-paulistana
+# https://github.com/adonescunha/nf-paulistana
 
 # Licensed under the MIT license:
 # http://www.opensource.org/licenses/mit-license

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# correios-frete
-# https://github.com/orygens/nf-paulistana
+# nf-paulistana
+# https://github.com/adonescunha/nf-paulistana
 
 # Licensed under the MIT license:
 # http://www.opensource.org/licenses/mit-license
