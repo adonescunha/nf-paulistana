@@ -59,7 +59,7 @@ class Tomador(Registry):
     complemento_endereco = Field(length=30, order=9)
     bairro = Field(length=30, order=10)
     cidade = Field(length=50, order=11)
-    uf = Field(length=2, order=12)
+    # uf = Field(length=2, order=12)
     cep = NumericField(length=8, order=13)
     email = Field(length=75, order=14)
 

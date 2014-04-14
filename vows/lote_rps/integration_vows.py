@@ -17,7 +17,8 @@ from nf_paulistana.lote_rps.registries import RPS, Tomador
 from nf_paulistana.lote_rps.lote import Lote
 
 
-EXPECTED = u'1001318010002006090120060904\r\n2RPS  A    00000000056220060903T000000000421500000000000000000071290500210008573745657900000000000000000000José Carlos                                                                R  Marina Ciufuli Zanfelice                          48                                      Lapa                          São Paulo                                         SP05040000jcarlos@josecarlos.org.br                                                  Cruzeiro: Sky Wonder|Destinos: Santos, Búzios, Angra dos Reis, Cabo Frio.|Cabine Externa\r\n2RPS  A    00000000056320060904T000000000348000000000000000000071290500210008407836699600000000000000000000Sergio Raul Salgado                                                        R  Marina Ciufuli Zanfelice                          50                                      Lapa                          São Paulo                                         SP05040000                                                                           Passagem Aérea: São Paulo - Lisboa - São Paulo.\r\n90000002000000000769500000000000000000\r\n'
+# EXPECTED = u'1001318010002006090120060904\r\n2RPS  A    00000000056220060903T000000000421500000000000000000071290500210008573745657900000000000000000000José Carlos                                                                R  Marina Ciufuli Zanfelice                          48                                      Lapa                          São Paulo                                         SP05040000jcarlos@josecarlos.org.br                                                  Cruzeiro: Sky Wonder|Destinos: Santos, Búzios, Angra dos Reis, Cabo Frio.|Cabine Externa\r\n2RPS  A    00000000056320060904T000000000348000000000000000000071290500210008407836699600000000000000000000Sergio Raul Salgado                                                        R  Marina Ciufuli Zanfelice                          50                                      Lapa                          São Paulo                                         SP05040000                                                                           Passagem Aérea: São Paulo - Lisboa - São Paulo.\r\n90000002000000000769500000000000000000\r\n'
+EXPECTED = u'1001318010002006090120060904\r\n2RPS  A    00000000056220060903T000000000421500000000000000000071290500210008573745657900000000000000000000José Carlos                                                                R  Marina Ciufuli Zanfelice                          48                                      Lapa                          São Paulo                                         05040000jcarlos@josecarlos.org.br                                                  Cruzeiro: Sky Wonder|Destinos: Santos, Búzios, Angra dos Reis, Cabo Frio.|Cabine Externa\r\n2RPS  A    00000000056320060904T000000000348000000000000000000071290500210008407836699600000000000000000000Sergio Raul Salgado                                                        R  Marina Ciufuli Zanfelice                          50                                      Lapa                          São Paulo                                         05040000                                                                           Passagem Aérea: São Paulo - Lisboa - São Paulo.\r\n90000002000000000769500000000000000000\r\n'
 
 @Vows.batch
 class IntegrationVows(Vows.Context):
@@ -42,7 +43,7 @@ class IntegrationVows(Vows.Context):
                 numero_endereco='48',
                 bairro='Lapa',
                 cidade=u'São Paulo',
-                uf='SP',
+                # uf='SP',
                 cep='05040000',
                 email='jcarlos@josecarlos.org.br'
             ),
@@ -67,7 +68,7 @@ Cabine Externa'''
                 numero_endereco='50',
                 bairro='Lapa',
                 cidade=u'São Paulo',
-                uf='SP',
+                # uf='SP',
                 cep='05040000'
             ),
             discriminacao_servicos=u'Passagem Aérea: São Paulo - Lisboa - São Paulo.'
