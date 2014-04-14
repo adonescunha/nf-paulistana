@@ -9,7 +9,6 @@
 # Copyright (c) 2014 Adones Cunha adonescunha@gmail.com
 
 
-import re
 from decimal import Decimal
 
 
@@ -111,7 +110,7 @@ class TextField(DefaultLengthMixin, Field):
         return self.value and self.process_value() or self.empty_value
 
     def process_value(self):
-        return re.sub(r'(\r)?\n', '|', self.value)
+        return '|'.join(self.value.splitlines())
 
 
 class RegistryField(DefaultLengthMixin, Field):
@@ -120,4 +119,4 @@ class RegistryField(DefaultLengthMixin, Field):
 
     @property
     def value_str(self):
-        return re.sub(r'\r\n$', '', self.value.as_registry())
+        return ''.join(self.value.as_registry().splitlines())
