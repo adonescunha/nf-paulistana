@@ -111,7 +111,7 @@ class TextField(DefaultLengthMixin, Field):
         return self.value and self.process_value() or self.empty_value
 
     def process_value(self):
-        return self.value.replace('\n', '|')
+        return re.sub(r'(\r)?\n', '|', self.value)
 
 
 class RegistryField(DefaultLengthMixin, Field):
