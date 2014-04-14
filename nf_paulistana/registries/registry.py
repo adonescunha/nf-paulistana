@@ -58,4 +58,4 @@ class Registry(object):
             f.value = getattr(self, f.attribute_name)
             result = result + f.as_registry()
 
-        return result + '\n\r'
+        return result + '\r\n'

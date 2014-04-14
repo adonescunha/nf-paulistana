@@ -195,7 +195,7 @@ class RegistryFieldVows(Vows.Context):
             field = RegistryField()
             expected_value = 'EXPECTEDVALUE'
             registry = Mock()
-            registry.as_registry = Mock(return_value=expected_value + '\n\r')
+            registry.as_registry = Mock(return_value=expected_value + '\r\n')
             field.value = registry
 
             return expected_value, field.value_str

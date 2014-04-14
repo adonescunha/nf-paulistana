@@ -143,7 +143,7 @@ class RegistryVows(Vows.Context):
                     registry_field1 = Field(length=5, order=1, default='MANGA')
                     registry_field2 = Field(length=10, order=2, default=10)
 
-                return  'MANGA10        \n\r', RegistryClass().as_registry()
+                return  'MANGA10        \r\n', RegistryClass().as_registry()
 
 
             def it_concatenates_fields_registry_representation(self, topic):

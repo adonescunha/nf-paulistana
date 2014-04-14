@@ -120,4 +120,4 @@ class RegistryField(DefaultLengthMixin, Field):
 
     @property
     def value_str(self):
-        return re.sub(r'\n\r$', '', self.value.as_registry())
+        return re.sub(r'\r\n$', '', self.value.as_registry())
