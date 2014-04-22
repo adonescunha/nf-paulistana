@@ -75,6 +75,6 @@ Cabine Externa'''
 
         return EXPECTED, lote.as_text()
 
-    def it_generates_a_valid_batch_text(self, topic):
+    def it_generates_a_valid_iso_8859_1_encoded_batch_text(self, topic):
         expected, actual = topic
-        expect(expected).to_equal(actual)
+        expect(expected.encode('iso-8859-1')).to_equal(actual)
