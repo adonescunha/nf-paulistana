@@ -56,4 +56,5 @@ class Lote(object):
     def as_text(self):
         return (self.build_cabecalho_registry().as_registry() +\
             reduce(lambda x, y: x + y.as_registry(), self.rps_set, '') +\
-                self.build_rodape_registry().as_registry()).encode('iso-8859-1')
+                self.build_rodape_registry().as_registry())\
+                    .encode('iso-8859-1', 'ignore')
